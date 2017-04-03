@@ -1,0 +1,53 @@
+- name: Push SHA tagged image to Dockerhub
+  tag: master
+  service: redis
+  type: push
+  image_name: cloudreach/redis
+  image_tag: '{{.CommitID}}'
+  registry: https://index.docker.io/v1/
+  encrypted_dockercfg_path: dockercfg.encrypted
+
+- name: Push latest image to Dockerhub
+  tag: master
+  service: redis
+  type: push
+  image_name: cloudreach/redis
+  image_tag: latest
+  registry: https://index.docker.io/v1/
+  encrypted_dockercfg_path: dockercfg.encrypted
+
+- name: Deploy to Kubernetes (Development)
+  tag: master
+  service: deploy_dev
+  encrypted_dockercfg_path: dockercfg.encrypted
+  command: bash deploy_app.sh
+
+- name: Push demo image to Dockerhub
+  tag: demo
+  service: redis
+  type: push
+  image_name: cloudreach/redis
+  image_tag: demo
+  registry: https://index.docker.io/v1/
+  encrypted_dockercfg_path: dockercfg.encrypted
+
+- name: Deploy to Kubernetes (Demo)
+  tag: demo
+  service: deploy_demo
+  encrypted_dockercfg_path: dockercfg.encrypted
+  command: bash deploy_app.sh
+
+- name: Push production image to Dockerhub
+  tag: ^\d+(\.\d+){2}$
+  service: redis
+  type: push
+  image_name: cloudreach/redis
+  image_tag: "{{.Branch}}"
+  registry: https://index.docker.io/v1/
+  encrypted_dockercfg_path: dockercfg.encrypted
+
+- name: Deploy to Kubernetes (Production)
+  tag: ^\d+(\.\d+){2}$
+  service: deploy_prod
+  encrypted_dockercfg_path: dockercfg.encrypted
+  command: bash deploy_app.sh
