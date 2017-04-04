@@ -1,3 +1,3 @@
-# Redis
+# Redis Configuration
 
-This is a Docker image with our configuration for redis.
+This repository is to be mounted as a gitRepo volume on the redis kubernetes deployment to supply a custom redis.conf
